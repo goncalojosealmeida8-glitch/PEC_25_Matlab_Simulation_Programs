@@ -6,7 +6,17 @@ rho_ar = 1.225;
 visc_ar = 1.5e-5;    
 St_base = 0.2;       
 
-D_topo = d_ext_mm / 1000; 
+if exist('diams_seccoes', 'var') && length(diams_seccoes) > 1
+    % Se houver variação, assume o diâmetro da última secção (em metros)
+    D_topo = diams_seccoes(end) / 1000; 
+elseif exist('torre', 'var') && torre == 2 && exist('tipo_geo', 'var') && tipo_geo == 1
+    % Salvaguarda caso seja uma torre de Encaixe Cónica
+    D_topo = d_topo_mm / 1000;
+else
+    % Caso padrão: diâmetro constante em toda a torre
+    D_topo = d_ext_mm / 1000; 
+end
+
 f1 = frequencias(1);      
 
 V_crit = (f1 * D_topo) / St_base;
